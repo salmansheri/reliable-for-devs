@@ -1,13 +1,21 @@
+
+
 import { NavLinks } from "@/contants";
 import Image from "next/image";
 import Link from "next/link";
 import { FC } from "react";
 import AuthProviders from "./AuthProviders";
+import { getCurrentUser } from "@/lib/session";
+import UserAvatar from "./UserAvatar";
+import { buttonVariants } from "./ui/button";
+
 
 interface NavbarProps {}
 
-const Navbar: FC<NavbarProps> = ({}) => {
-  const session = {};
+const Navbar: FC<NavbarProps> = async ({}) => {
+  const session = await getCurrentUser();
+  console.log(session);  
+  
   return (
     <nav className="flexBetween navbar ">
       <div className="flex-1  flexStart gap-10">
@@ -25,8 +33,13 @@ const Navbar: FC<NavbarProps> = ({}) => {
       <div className="flexCenter gap-4">
         {session ? (
             <>
-            Userphoto
-            <Link href="/create-project">
+            <UserAvatar 
+              src={session.user.image!}
+              username={session.user.name!}
+            />
+            <Link className={buttonVariants({
+              variant: 'default', 
+            })} href="/create-project">
                 Share work
             </Link>
             </>
