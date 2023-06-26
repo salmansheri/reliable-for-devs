@@ -28,6 +28,7 @@ yarn-error.log*
 .env*.local
 /grafbase/.env
 .env
+/.grafbase
 
 # vercel
 .vercel

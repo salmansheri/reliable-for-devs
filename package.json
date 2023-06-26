@@ -23,6 +23,7 @@
     "class-variance-authority": "^0.6.0",
     "cloudinary": "^1.37.2",
     "clsx": "^1.2.1",
+    "encoding": "^0.1.13",
     "eslint": "8.43.0",
     "eslint-config-next": "13.4.7",
     "graphql-request": "^6.1.0",
