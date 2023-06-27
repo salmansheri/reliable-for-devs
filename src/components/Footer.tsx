@@ -37,7 +37,7 @@ const FooterColumn: FC<FooterColumnProps> = ({ title, links }) => {
 const Footer: FC<FooterProps> = ({}) => {
   const date = new Date(); 
   const year = date.getFullYear();
-  return <footer className="flexStart footer">
+  return <footer className="flexStart footer ">
     <div className="flex flex-col gap-12 w-full">
       <div className="flex items-start flex-col">
         <Image 

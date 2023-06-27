@@ -178,7 +178,7 @@ body {
 
 /* Footer */
 .footer {
-  @apply flex-col paddings w-full gap-20 bg-light-white;
+  @apply flex-col paddings w-full gap-20 ;
 }
 
 .footer_copyright {

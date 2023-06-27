@@ -1,26 +1,48 @@
-
+"use client";
 
 import { NavLinks } from "@/contants";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FC } from "react";
 import AuthProviders from "./AuthProviders";
-import { getCurrentUser } from "@/lib/session";
+
+import { ModeToggle } from "@/Providers/dark-mode-toggle";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Session } from "next-auth";
+import { signOut } from "next-auth/react";
+import { useTheme } from "next-themes";
 import UserAvatar from "./UserAvatar";
 import { buttonVariants } from "./ui/button";
+interface NavbarProps {
+  currentUser: Session | null;
+}
 
+const Navbar: FC<NavbarProps> = ({ currentUser }) => {
+  const router = useRouter();
+  // const session = await getCurrentUser();
+  // console.log(session);
+  const session = false;
+  const { theme, setTheme } = useTheme();
 
-interface NavbarProps {}
-
-const Navbar: FC<NavbarProps> = async ({}) => {
-  const session = await getCurrentUser();
-  console.log(session);  
-  
   return (
-    <nav className="flexBetween navbar ">
+    <nav className="dark:text-white flexBetween navbar ">
       <div className="flex-1  flexStart gap-10">
         <Link href="#">
-          <Image src="/logo.svg" width={115} height={43} alt="flexibble" />
+          <Image
+            src={theme === "light" ? "/logo.svg" : "/logo-purple.svg"}
+            width={115}
+            height={43}
+            alt="flexibble"
+          />
         </Link>
         <ul className="xl:flex hidden text-small gap-7">
           {NavLinks.map((link) => (
@@ -31,23 +53,53 @@ const Navbar: FC<NavbarProps> = async ({}) => {
         </ul>
       </div>
       <div className="flexCenter gap-4">
-        {session ? (
-            <>
-            <UserAvatar 
-              src={session.user.image!}
-              username={session.user.name!}
-            />
-            <Link className={buttonVariants({
-              variant: 'default', 
-            })} href="/create-project">
-                Share work
+        <ModeToggle />
+        {currentUser ? (
+          <>
+            {/* <UserAvatar 
+              src={session?.user?.image!}
+              username={session.user?.name!}
+            /> */}
+            <Link
+              className={buttonVariants({
+                variant: "default",
+              })}
+              href="/create-project"
+            >
+              Share work
             </Link>
-            </>
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <UserAvatar
+                  src={currentUser?.user?.image!}
+                  username={currentUser?.user?.name!}
+                />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
 
-        ): (
+                <DropdownMenuGroup>
+                  <DropdownMenuItem onClick={() => router.push(`/profile`)}>
+                    Profile
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() =>
+                      signOut({
+                        callbackUrl: "/",
+                      })
+                    }
+                  >
+                    Signout
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </>
+        ) : (
+          <>
             <AuthProviders />
-        
-
+          </>
         )}
       </div>
     </nav>
