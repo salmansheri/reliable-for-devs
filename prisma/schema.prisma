@@ -80,6 +80,7 @@ model Project {
   description String?
   image String?
   githubUrl String?
+  liveSiteUrl String?
   category String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
